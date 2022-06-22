@@ -5,6 +5,7 @@ import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
+import "xdeployer";
 
 import { TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS } from "hardhat/builtin-tasks/task-names";
 
@@ -19,6 +20,13 @@ subtask(TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS).setAction(
   }
 );
 
+const {
+  alchemyApiKey,
+  mnemonic_matemask_account1,
+  mnemonic_matemask_account10
+
+} = require('./secrets.json')
+
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
@@ -31,7 +39,7 @@ const config: HardhatUserConfig = {
           viaIR: true,
           optimizer: {
             enabled: true,
-            runs: 19066,
+            runs: 200,
           },
         },
       },
@@ -43,7 +51,7 @@ const config: HardhatUserConfig = {
           viaIR: true,
           optimizer: {
             enabled: true,
-            runs: 1000000,
+            runs: 100,
           },
         },
       },
@@ -53,10 +61,28 @@ const config: HardhatUserConfig = {
           viaIR: true,
           optimizer: {
             enabled: true,
-            runs: 1000000,
+            runs: 100,
           },
         },
       },
+      "contracts/CREATE2SafeDeploy.sol":{
+        version: "0.5.1",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+      "contracts/ImmutableCreate2Factory.sol":{
+        version: "0.5.6",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      }
     },
   },
   networks: {
@@ -64,6 +90,36 @@ const config: HardhatUserConfig = {
       blockGasLimit: 30_000_000,
       throwOnCallFailures: false,
     },
+    ropsten_test_account1: {
+      url: process.env.ROPSTEN_URL || "",
+      accounts: { mnemonic: mnemonic_matemask_account1 },
+      gas: 30000000,      
+    },
+
+    rinkeby_test_account1: {
+      url: process.env.RINKEBY_URL || "",
+      accounts: { mnemonic: mnemonic_matemask_account1 },
+      gas: 30000000,
+      gasPrice:150000059 
+    },
+
+    rinkeby_test_account10: {
+      url: process.env.RINKEBY_URL || "",
+      accounts: { mnemonic: mnemonic_matemask_account10 },
+      gas: 30000000,
+      gasPrice:150000059 
+    },
+
+
+  },
+  xdeploy: {
+    contract: "Seaport",
+    constructorArgsPath: "./SeaportArgs.ts",
+    salt: "777",
+    signer: process.env.PRIVATE_KEY,
+    networks: [ "rinkeby"],
+    rpcUrls: [process.env.RINKEBY_URL],
+    gasLimit: 1.5 * 10 ** 7,
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
