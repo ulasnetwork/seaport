@@ -110,6 +110,13 @@ const config: HardhatUserConfig = {
       gasPrice:150000059 
     },
 
+    local_test_account1: {
+      url: "http://127.0.0.1:8545",
+      accounts: { mnemonic: mnemonic_matemask_account1 },
+      gas: 30000000,
+      gasPrice:150000059 
+    },
+
 
   },
   xdeploy: {

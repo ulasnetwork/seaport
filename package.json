@@ -10,8 +10,10 @@
     "node": ">=16.0.0"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^4.6.0",
     "ethers": "^5.5.3",
     "ethers-eip712": "^0.2.0",
+    "ganache": "^7.3.1",
     "hardhat": "https://github.com/0age/hardhat/releases/download/viaIR-2.9.3/hardhat-v2.9.3.tgz"
   },
   "devDependencies": {
@@ -68,7 +70,8 @@
     "lint:fix": "prettier --write **.sol && prettier --write **.js && prettier --write **.ts",
     "test:forge": "FOUNDRY_PROFILE=reference forge build; FOUNDRY_PROFILE=optimized forge build; FOUNDRY_PROFILE=test forge test -vvv",
     "test:lite": "FOUNDRY_PROFILE=reference forge build; FOUNDRY_PROFILE=lite forge test -vvv",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "localnetwork": "ganache --fork https://rinkeby.infura.io/v3/f0de7e3d089e4951b5a8a1cebd7ef11a"
   },
   "lint-staged": {
     "*.sol": "prettier --write",
